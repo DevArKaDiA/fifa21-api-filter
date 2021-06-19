@@ -15,9 +15,11 @@ services:
             - ./mysql:/var/lib/mysql
             # - ./sql:/docker-entrypoint-initdb.d
     python:
+        environment:
+            API_KEY: "asdqwezxc"
         build: .        
-        expose: 
-            - "8001"
+        ports: 
+            - "8000:8000"
         depends_on: 
             - db
     

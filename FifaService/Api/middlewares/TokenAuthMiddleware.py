@@ -11,7 +11,7 @@ class TokenAuthMiddleware:
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        apiKey = os.getenv('API_KEY', 'ASD')
+        apiKey = os.getenv('API_KEY')
         if apiKey != None:
             if 'x-api-key' in request.headers:
                 if request.headers['x-api-key'] == str(apiKey):

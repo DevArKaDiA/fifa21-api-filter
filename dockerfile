@@ -12,21 +12,15 @@ RUN git clone https://github.com/DevArKaDiA/fifa21-api-filter.git /src
 # Set the working directory to /drf
 # NOTE: all the directives that follow in the Dockerfile will be executed in
 # that directory.
+WORKDIR /src/FifaService/
 
-WORKDIR /src
-
-RUN git pull
-
-WORKDIR /FifaService
-
-RUN ls
+RUN ls .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
 # VOLUME /code
 
-EXPOSE 8001
-
-CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 127.0.0.1:8001
+EXPOSE 8000
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
 # CMD ["%%CMD%%"]

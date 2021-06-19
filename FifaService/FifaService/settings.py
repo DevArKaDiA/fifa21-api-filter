@@ -28,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_RENDERER_CLASSES': (
-    #     'rest_framework.renderers.JSONRenderer',
-    # ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
     'MAX_PAGE_SIZE': 100,
@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'FifaService.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-import os
-import pymysql
+# import os
+# import pymysql
 
-# connect mysql
-pymysql.install_as_MySQLdb()
+# # connect mysql
+# pymysql.install_as_MySQLdb()
 
 
 DATABASES = {    

@@ -88,13 +88,20 @@ WSGI_APPLICATION = 'FifaService.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+import os
+import pymysql
+
+# connect mysql
+pymysql.install_as_MySQLdb()
+
+
 DATABASES = {    
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'fifaService',
         'USER': 'user',
         'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '3306',
     }
 }

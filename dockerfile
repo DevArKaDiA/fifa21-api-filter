@@ -7,21 +7,26 @@ FROM python:3.6
 ENV PYTHONUNBUFFERED 1
 
 # Get the Real World example app
-RUN git clone https://github.com/DevArKaDiA/fifa21-api-filter.git /code
+RUN git clone https://github.com/DevArKaDiA/fifa21-api-filter.git /src
 
 # Set the working directory to /drf
 # NOTE: all the directives that follow in the Dockerfile will be executed in
 # that directory.
-WORKDIR /code/FifaService
 
-RUN ls .
+WORKDIR /src
+
+RUN git pull
+
+WORKDIR /FifaService
+
+RUN ls
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
-VOLUME /code
+# VOLUME /code
 
-EXPOSE 8080
+EXPOSE 8001
 
-CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 127.0.0.1:8000
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 127.0.0.1:8001
 # CMD ["%%CMD%%"]

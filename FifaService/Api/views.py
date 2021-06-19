@@ -1,8 +1,6 @@
 from django.http.response import JsonResponse
-from rest_framework.renderers import JSONRenderer
 from rest_framework.decorators import api_view
 from rest_framework import viewsets, mixins
-from rest_framework.response import Response
 
 # from rest_framework import permissions
 from Api.serializers import PlayerSerializer, TeamSerializer
@@ -27,13 +25,12 @@ class PlayerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         order = self.request.query_params.get('order')        
         
         if name is not None:
-            queryset = queryset.filter(commonName__contains=name)
+            queryset = queryset.filter(commonName__icontains=name)
 
         if order is not None:
             queryset = queryset.order_by("commonName" if order == "asc" else "-commonName")
         else:
-            queryset = queryset.order_by("commonName")
-            
+            queryset = queryset.order_by("commonName")            
             
         return queryset
 
@@ -43,12 +40,17 @@ class PlayerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 def TeamPlayersView(request):
     if request.method == 'POST':        
         if "Name" in request.data:
-            selectedTeam: Team = Team.objects.all().filter(teamName__contains=request.data['Name']).first()
-            Players = TeamSerializer(selectedTeam).data            
-            return JsonResponse({
-                'TeamName': selectedTeam.teamName,
-                'Players' : Players['player_set']
+            selectedTeam: Team = Team.objects.all().filter(teamName__icontains=request.data['Name']).first()
+            if selectedTeam:
+                Players = TeamSerializer(selectedTeam).data
+                
+                return JsonResponse({
+                    'TeamName': selectedTeam.teamName,
+                    'Players' : Players['player_set']
+                    })
+            else:
+                return JsonResponse({
+                    'message': "Team don't found"
                 })
-    
     
 

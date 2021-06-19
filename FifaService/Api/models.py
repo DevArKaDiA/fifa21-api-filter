@@ -17,5 +17,5 @@ class Player(models.Model):
     lastName = models.CharField(max_length=50)     
     position = models.CharField(max_length=10)
     fifa_id = models.CharField(max_length=10)
-    team_id = models.ForeignKey(Team, on_delete=CASCADE)
+    team = models.ForeignKey(Team, on_delete=CASCADE)
 

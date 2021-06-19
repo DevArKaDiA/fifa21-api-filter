@@ -1,6 +1,6 @@
 from typing import Dict, List
 from django.core.management.base import BaseCommand, CommandError, CommandParser
-from Api.models import Player
+from Api.models import Player, Team
 from threading import Thread
 import requests as rq
 import json
@@ -18,21 +18,32 @@ class Command(BaseCommand):
 
         def StorePlayers(items: list = []) -> None:            
             for player in items:
-                oldPlayer: Player = Player.objects.filter(fifa_id=player["id"]).first()
+                oldPlayer: Player = Player.objects.all().filter(fifa_id=player["id"]).first()
+
+                team: Team = Team.objects.all().filter(teamName=player["club"]["name"]).first()
+
+                if not team:
+                    team = Team(teamName=player["club"]["name"])
+                    team.save()
+
+
+                print(player['commonName'])
                 if oldPlayer:                    
                     oldPlayer.commonName=player['commonName'],
                     oldPlayer.firstName=player['firstName'],
                     oldPlayer.lastName=player['lastName'],
                     oldPlayer.position=player['position'],
                     oldPlayer.fifa_id=player['id']
+                    oldPlayer.team=team
                     oldPlayer.save()
                 else:
                     newPlayer = Player(
                         commonName=player['commonName'],
                         firstName=player['firstName'],
                         lastName=player['lastName'],
-                        position=player['position'],
+                        position=player['position'],                      
                         fifa_id=player['id'],
+                        team=team,
                     )
                     newPlayer.save()
 
@@ -45,12 +56,11 @@ class Command(BaseCommand):
         for page in range(initialRequest['page'] + 1, totalPages + 1):
             def requestAndSave(page):
                 response = request(page)
-                StorePlayers(response['items'])
-                print(page)
+                StorePlayers(response['items'])               
 
             
             workers.append(Thread(target=requestAndSave, args=[page]))
-            if(len(workers) == 100):
+            if(len(workers) == 50):
                 for worker in workers:
                     worker.start()
                 for worker in workers:

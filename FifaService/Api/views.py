@@ -1,15 +1,18 @@
-from django.views import generic
+from django.http.response import JsonResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework.decorators import api_view
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
+
 # from rest_framework import permissions
-from Api.serializers import PlayerSerializer
-from Api.models import Player
+from Api.serializers import PlayerSerializer, TeamSerializer
+from Api.models import Player, Team
 
 
 
 class PlayerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows Players to be viewed or edited.
     """
     serializer_class = PlayerSerializer
     # queryset = Player.objects.all()#.order_by('-commonName')
@@ -33,4 +36,19 @@ class PlayerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             
             
         return queryset
+
+
+
+@api_view(['POST'])
+def TeamPlayersView(request):
+    if request.method == 'POST':        
+        if "Name" in request.data:
+            selectedTeam: Team = Team.objects.all().filter(teamName__contains=request.data['Name']).first()
+            Players = TeamSerializer(selectedTeam).data            
+            return JsonResponse({
+                'TeamName': selectedTeam.teamName,
+                'Players' : Players['player_set']
+                })
+    
+    
 

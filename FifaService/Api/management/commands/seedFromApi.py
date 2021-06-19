@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         def StorePlayers(items: list = []) -> None:            
             for player in items:
-                oldPlayer: Player = Player.objects.filter(fifa_id=player["id"])[0]
+                oldPlayer: Player = Player.objects.filter(fifa_id=player["id"]).first()
                 if oldPlayer:                    
                     oldPlayer.commonName=player['commonName'],
                     oldPlayer.firstName=player['firstName'],
@@ -41,13 +41,21 @@ class Command(BaseCommand):
         totalPages: int = initialRequest['totalPages']
         totalResults: int = initialRequest['totalResults']
         StorePlayers(initialRequest['items'])
+        workers = []
         for page in range(initialRequest['page'] + 1, totalPages + 1):
             def requestAndSave(page):
                 response = request(page)
                 StorePlayers(response['items'])
                 print(page)
-            pageWorker = Thread(target=requestAndSave, args=[page])
-            pageWorker.start()                        
+
+            
+            workers.append(Thread(target=requestAndSave, args=[page]))
+            if(len(workers) == 100):
+                for worker in workers:
+                    worker.start()
+                for worker in workers:
+                    worker.join()
+                workers = []
             
             
 

@@ -27,8 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+REST_FRAMEWORK = {
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.JSONRenderer',
+    # ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
-# FifaService.settings pylint --load-plugins pylint_django [..other options..] <path_to_your_sources>
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,8 +44,10 @@ INSTALLED_APPS = [
     'Api',
 
 
+    'django_filters',
+    'django_seed',
+    'rest_framework'
 
-    'django_seed'
 ]
 
 MIDDLEWARE = [

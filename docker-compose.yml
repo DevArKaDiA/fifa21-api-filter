@@ -1,6 +1,11 @@
 version: '3'
 
 services:
+    python:
+        build: .        
+        ports:
+            - "9090:8000"
+
     db:
         image: mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

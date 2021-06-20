@@ -18,7 +18,7 @@ Each start of the containers, will synchronize with the FUT21 api, therefore it 
 |       Method         |URL                          |Payload/Args                         |
 |----------------|-------------------------------|-----------------------------|
 |GET				|`'api/v1/player'`            |/?name={PlayerName}&order={Asc or Desc} #default = asc            |
-|POST          |`"api/v1/player"`          	  |{"Name": {Player name}} |
+|POST          |`"api/v1/team"`          	  |{"Name": {TeamName}} |
 
 
 ## AUTH

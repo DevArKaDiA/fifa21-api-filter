@@ -17,7 +17,7 @@ class PlayerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def get_queryset(self):
         """
         Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
+        by filtering against a `player` query parameter in the URL.
         """
         queryset = Player.objects.all()
         
